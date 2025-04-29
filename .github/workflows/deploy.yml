@@ -21,6 +21,18 @@ jobs:
     steps: 
       - name: Checkout code
         uses: actions/checkout@v3
+
+        #required for Prettier
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Prettier
+        run: npm install --global prettier
+
+      - name: Run Prettier format
+        run: prettier --write .
     
     #  - name: Check Java version
     #    shell: bash
@@ -29,7 +41,7 @@ jobs:
     #      echo "Error: Java 17 missing. Java 17 is required."
     #      exit 1
     #      fi
-    
+
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
         with:
