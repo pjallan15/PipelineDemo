@@ -30,11 +30,11 @@ jobs:
     #      exit 1
     #      fi
       
-    #  - name: Run Gradle Build
-    #    run: ./gradlew build
+      - name: Run Gradle Build
+        run: ./gradlew build
 
-    #  - name: Run Gradle Tests
-    #    run: ./gradle test
+      - name: Run Gradle Tests
+        run: ./gradlew test
 
   deploy-dev:
     needs: build-and-test
