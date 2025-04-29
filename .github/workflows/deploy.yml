@@ -34,7 +34,7 @@ jobs:
         run: gradle build
 
       - name: Run Gradle Tests
-        run: gradle test
+        run: gradle test --rerun-tasks
 
   deploy-dev:
     needs: build-and-test
