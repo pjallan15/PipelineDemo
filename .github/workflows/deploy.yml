@@ -1,0 +1,90 @@
+name: Pipeline Test for Ivanti
+
+on: 
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+      - qa
+      - staging
+      - prod
+
+jobs: 
+  build-and-test:
+
+    runs-on: ubuntu-latest
+    container: 
+      image: gradle:8.14.0-jdk17
+
+    steps: 
+      - name: Checkout code
+        uses: actions/checkout@v3
+    
+      - name: Check Java version
+        run: |
+          if [[$(java -version 2>&1) != *"17."*]]; then
+          echo "Error: Java 17 missing. Java 17 is required."
+          exit 1
+          fi
+      
+    #  - name: Run Gradle Build
+    #    run: ./gradlew build
+
+    #  - name: Run Gradle Tests
+    #    run: ./gradle test
+
+  deploy-dev:
+    needs: build-and-test
+    if: github.ref == 'ref/heads/dev' 
+    runs-on: ubuntu-latest
+    environment: dev
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Dev
+        run: bash scripts/deploy-to-dev.sh
+
+  deploy-qa:
+    needs: build-and-test
+    if: github.ref == 'ref/heads/qa' 
+    runs-on: ubuntu-latest
+    environment: qa
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to QA
+        run: bash scripts/deploy-to-qa.sh
+
+  deploy-staging:
+    needs: build-and-test
+    if: github.ref == 'ref/heads/staging' 
+    runs-on: ubuntu-latest
+    environment: staging
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Staging
+        run: bash scripts/deploy-to-staging.sh
+
+  deploy-prod:
+    needs: build-and-test
+    if: github.ref == 'ref/heads/prod' 
+    runs-on: ubuntu-latest
+    environment: prod
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Staging
+        run: bash scripts/deploy-to-prod.sh
+                
+
