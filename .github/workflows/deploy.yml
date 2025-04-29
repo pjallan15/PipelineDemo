@@ -31,10 +31,10 @@ jobs:
     #      fi
       
       - name: Run Gradle Build
-        run: ./gradlew build
+        run: gradle build
 
       - name: Run Gradle Tests
-        run: ./gradlew test
+        run: gradle test
 
   deploy-dev:
     needs: build-and-test
