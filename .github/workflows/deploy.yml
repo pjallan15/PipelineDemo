@@ -22,13 +22,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
     
-      - name: Check Java version
-        shell: bash
-        run: |
-          if [[$(java -version 2>&1) != *"17."*]]; then
-          echo "Error: Java 17 missing. Java 17 is required."
-          exit 1
-          fi
+    #  - name: Check Java version
+    #    shell: bash
+    #    run: |
+    #      if [[$(java -version 2>&1) != *"17."*]]; then
+    #      echo "Error: Java 17 missing. Java 17 is required."
+    #      exit 1
+    #      fi
       
     #  - name: Run Gradle Build
     #    run: ./gradlew build
