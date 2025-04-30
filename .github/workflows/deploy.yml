@@ -20,25 +20,16 @@ jobs:
 
     steps: 
       - name: Checkout code
-        uses: actions/checkout@v3
-    
-    #  - name: Check Java version
-    #    shell: bash
-    #    run: |
-    #      if [[$(java -version 2>&1) != *"17."*]]; then
-    #      echo "Error: Java 17 missing. Java 17 is required."
-    #      exit 1
-    #      fi
+        uses: actions/checkout@v4
 
       - name: Cache Gradle dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
-            gradle-${{ runner.os }}-  
+            gradle-${{ runner.os }}
 
       - name: Run Gradle Build
         run: gradle build
@@ -54,7 +45,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Deploy to Dev
         run: bash scripts/deploy-to-dev.sh
@@ -67,7 +58,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Deploy to QA
         run: bash scripts/deploy-to-qa.sh
@@ -80,7 +71,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Deploy to Staging
         run: bash scripts/deploy-to-staging.sh
@@ -93,9 +84,37 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Deploy to Staging
         run: bash scripts/deploy-to-prod.sh
-                
+  
+  sonar-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'jammy'
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: gradle build sonar --info       
 

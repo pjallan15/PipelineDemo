@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "org.sonarqube" version "6.0.1.5171"
 }
 
 group = 'com.example'
@@ -8,6 +9,14 @@ version = '1.0'
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+}
+
+sonar {
+  properties {
+    property "sonar.projectKey", "pjallan15_PipelineDemo"
+    property "sonar.organization", "pjallan15"
+    property "sonar.host.url", "https://sonarcloud.io"
+  }
 }
 
 repositories {
