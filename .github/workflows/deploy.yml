@@ -32,7 +32,7 @@ jobs:
             gradle-${{ runner.os }}
 
       - name: Run Gradle Build
-        run: gradle build
+        run: gradle build --exclude-task test
 
       - name: Run Gradle Tests
         run: gradle test --rerun-tasks
