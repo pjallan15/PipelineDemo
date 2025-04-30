@@ -35,7 +35,7 @@ jobs:
         run: gradle build --exclude-task test
 
       - name: Run Gradle Tests
-        run: gradle test --rerun-tasks
+        run: gradle test jacocoTestReport --rerun-tasks
 
   deploy-dev:
     needs: build-and-test
