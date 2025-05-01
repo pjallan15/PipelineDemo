@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    id "org.sonarqube" version "6.0.1.5171"
+}
+
+group = 'com.example'
+version = '1.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.10"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true  // SonarCloud needs this
+        csv.required = false
+        html.required = false
+    }
+}
+
+sonar {
+  properties {
+    property "sonar.projectKey", "pjallan15_PipelineDemo"
+    property "sonar.organization", "pjallan15"
+    property "sonar.host.url", "https://sonarcloud.io"
+    property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+  }
+}
