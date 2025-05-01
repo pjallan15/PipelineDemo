@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - dev
+      - qa
+      - staging
+      - prod
   pull_request:
     branches:
       - dev
@@ -69,7 +72,7 @@ jobs:
 
   deploy-dev:
     needs: build-and-test
-    if: github.ref == 'refs/heads/dev' 
+    if: github.ref == 'refs/heads/dev' && github.event_name == 'push' 
     runs-on: ubuntu-latest
     environment: dev
     
@@ -82,7 +85,7 @@ jobs:
 
   deploy-qa:
     needs: build-and-test
-    if: github.ref == 'refs/heads/qa' 
+    if: github.ref == 'refs/heads/qa' && github.event_name == 'push' 
     runs-on: ubuntu-latest
     environment: qa
     
@@ -95,7 +98,7 @@ jobs:
 
   deploy-staging:
     needs: build-and-test
-    if: github.ref == 'refs/heads/staging' 
+    if: github.ref == 'refs/heads/staging' && github.event_name == 'push' 
     runs-on: ubuntu-latest
     environment: staging
     
@@ -108,7 +111,7 @@ jobs:
 
   deploy-prod:
     needs: sonar-scan
-    if: github.ref == 'refs/heads/prod' 
+    if: github.ref == 'refs/heads/prod' && github.event_name == 'push' 
     runs-on: ubuntu-latest
     environment: prod
     

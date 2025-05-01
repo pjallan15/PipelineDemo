@@ -7,6 +7,6 @@ public class AppTest {
 
     @Test
     public void testAdd() {
-        assertEquals(4, App.add(2, 2));
+        assertEquals(8, App.add(4, 4));
     }
 }
